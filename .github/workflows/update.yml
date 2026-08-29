@@ -308,7 +308,7 @@ jobs:
                   f.write(page)
 
               print("Generated:", filename)
-                    python - <<'PY'
+                       PY
                     
 
       - name: Generate sitemap
@@ -339,55 +339,6 @@ jobs:
 
           echo "sitemap.xml generated"
 
-      - name: Generate sitemap
-        run: |
-          cat > sitemap.xml <<'EOF'
-          <?xml version="1.0" encoding="UTF-8"?>
-          <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-            <url>
-              <loc>https://codey-ally.github.io/selqia/</loc>
-            </url>
-            <url>
-              <loc>https://codey-ally.github.io/selqia/biyoueki.html</loc>
-            </url>
-            <url>
-              <loc>https://codey-ally.github.io/selqia/pack.html</loc>
-            </url>
-            <url>
-              <loc>https://codey-ally.github.io/selqia/cosme.html</loc>
-            </url>
-            <url>
-              <loc>https://codey-ally.github.io/selqia/beauty-device.html</loc>
-            </url>
-            <url>
-              <loc>https://codey-ally.github.io/selqia/haircare.html</loc>
-            </url>
-          </urlset>
-          EOF
-
-        
-          <?xml version="1.0" encoding="UTF-8"?>
-          <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-            <url>
-              <loc>https://codey-ally.github.io/selqia/</loc>
-            </url>
-            <url>
-              <loc>https://codey-ally.github.io/selqia/biyoueki.html</loc>
-            </url>
-            <url>
-              <loc>https://codey-ally.github.io/selqia/pack.html</loc>
-            </url>
-            <url>
-              <loc>https://codey-ally.github.io/selqia/cosme.html</loc>
-            </url>
-            <url>
-              <loc>https://codey-ally.github.io/selqia/beauty-device.html</loc>
-            </url>
-            <url>
-              <loc>https://codey-ally.github.io/selqia/haircare.html</loc>
-            </url>
-          </urlset>
-          EOF
 
       - name: Commit updates
         run: |
