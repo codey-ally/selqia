@@ -244,12 +244,29 @@
   }
 
   function searchProducts() {
-    const keyword = document.getElementById("keyword").value.trim();
+  const keyword = document.getElementById("keyword").value
+    .trim()
+    .toLowerCase();
 
-    if (!keyword) {
-      loadProducts();
-      return;
+  const cards = document.querySelectorAll(".product-card");
+
+  if (!keyword) {
+    cards.forEach(card => {
+      card.style.display = "";
+    });
+    return;
+  }
+
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+
+    if (text.includes(keyword)) {
+      card.style.display = "";
+    } else {
+      card.style.display = "none";
     }
+  });
+}
 
     // 次の自動取得システム完成後、
     // キーワード検索にも対応させます。
