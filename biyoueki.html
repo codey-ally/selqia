@@ -1,1 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>美容液おすすめ｜SELQIAN</title>
+
+  <meta name="description"
+        content="美容液を探している人向けに、楽天市場の美容液をチェック。価格や商品情報を比較して、自分に合うアイテムを探せます。">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif;
+      background: #fafafa;
+      color: #222;
+    }
+
+    header {
+      padding: 22px 20px;
+      text-align: center;
+      background: white;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 8px;
+      color: #777;
+      font-size: 12px;
+      text-decoration: none;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 35px 20px 60px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 30px 10px;
+    }
+
+    .hero h1 {
+      font-size: 30px;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .hero p {
+      color: #777;
+      line-height: 1.7;
+    }
+
+    .notice {
+      padding: 15px;
+      background: white;
+      border-radius: 14px;
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    #products {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .product-card {
+      display: flex;
+      gap: 15px;
+      padding: 15px;
+      border-radius: 16px;
+      background: white;
+      color: #333;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(0,0,0,.06);
+    }
+
+    .product-card img {
+      width: 110px;
+      height: 110px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .product-card h2 {
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 5px 0;
+    }
+
+    .category {
+      font-size: 11px;
+      color: #888;
+    }
+
+    .price {
+      font-weight: 800;
+      margin: 8px 0;
+    }
+
+    .button {
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 50px;
+      color: #777;
+    }
+
+    footer {
+      padding: 30px;
+      text-align: center;
+      background: white;
+      color: #999;
+      font-size: 12px;
+    }
+
+    @media (max-width: 600px) {
+      #products {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">SELQIAN</div>
+  <a class="back" href="./index.html">← トップへ戻る</a>
+</header>
+
+<main>
+
+  <section class="hero">
+    <h1>美容液おすすめ</h1>
+    <p>
+      毎日のスキンケアに取り入れたい<br>
+      美容液をチェック。
+    </p>
+  </section>
+
+  <div class="notice">
+    楽天市場の商品情報をもとに掲載しています。
+    商品価格や在庫などは楽天市場の商品ページでご確認ください。
+  </div>
+
+  <section>
+    <div id="products">
+      <div class="loading">商品を読み込んでいます…</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  © SELQIAN
+</footer>
+
+<script>
+fetch("./products.json")
+  .then(response => response.json())
+  .then(data => {
+
+    const products = data.items || [];
+
+    const beautyItems = products.filter(
+      p => p._category === "美容液"
+    );
+
+    const list = document.getElementById("products");
+
+    if (beautyItems.length === 0) {
+      list.innerHTML =
+        "<p>現在、美容液の商品情報を取得できませんでした。</p>";
+      return;
+    }
+
+    list.innerHTML = beautyItems.map(p => {
+
+      const image =
+        p.mediumImageUrls?.[0]?.imageUrl ||
+        p.smallImageUrls?.[0]?.imageUrl ||
+        "";
+
+      const name = p.itemName || "商品名";
+      const price =
+        Number(p.itemPrice || 0).toLocaleString();
+
+      const url =
+        p.affiliateUrl ||
+        p.itemUrl ||
+        "#";
+
+      return `
+        <a class="product-card"
+           href="${url}"
+           target="_blank"
+           rel="noopener noreferrer">
+
+          <img src="${image}" alt="${name}">
+
+          <div>
+            <span class="category">美容液</span>
+
+            <h2>${name}</h2>
+
+            <div class="price">
+              ¥${price}
+            </div>
+
+            <div class="button">
+              楽天市場で見る →
+            </div>
+          </div>
+
+        </a>
+      `;
+
+    }).join("");
+
+  })
+  .catch(error => {
+
+    console.error(error);
+
+    document.getElementById("products").innerHTML =
+      "<p>商品を読み込めませんでした。</p>";
+
+  });
+</script>
+
+</body>
+</html>
