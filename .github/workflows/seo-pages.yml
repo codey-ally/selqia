@@ -218,52 +218,40 @@ jobs:
 
       - name: Generate sitemap
         run: |
-          python - <<'PY'
-          import xml.etree.ElementTree as ET
-          python - <<'PY'
-          import xml.etree.ElementTree as ET
+          cat > sitemap.xml <<'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+            <url><loc>https://codey-ally.github.io/selqia/</loc></url>
+            <url><loc>https://codey-ally.github.io/selqia/biyoueki.html</loc></url>
+            <url><loc>https://codey-ally.github.io/selqia/pack.html</loc></url>
+            <url><loc>https://codey-ally.github.io/selqia/cosme.html</loc></url>
+            <url><loc>https://codey-ally.github.io/selqia/beauty-device.html</loc></url>
+            <url><loc>https://codey-ally.github.io/selqia/haircare.html</loc></url>
+            <url><loc>https://codey-ally.github.io/selqia/serum-recommend.html</loc></url>
+            <url><loc>https://codey-ally.github.io/selqia/korean-serum.html</loc></url>
+            <url><loc>https://codey-ally.github.io/selqia/pore-serum.html</loc></url>
+            <url><loc>https://codey-ally.github.io/selqia/dry-skin-serum.html</loc></url>
+            <url><loc>https://codey-ally.github.io/selqia/face-pack-recommend.html</loc></url>
+            <url><loc>https://codey-ally.github.io/selqia/korean-cosme.html</loc></url>
+            <url><loc>https://codey-ally.github.io/selqia/beauty-device-recommend.html</loc></url>
+            <url><loc>https://codey-ally.github.io/selqia/haircare-recommend.html</loc></url>
+          </urlset>
+          EOF
 
-          base = "https://codey-ally.github.io/selqia/"
+      - name: Commit SEO pages and sitemap
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          pages = [
-              "",
-              "biyoueki.html",
-              "pack.html",
-              "cosme.html",
-              "beauty-device.html",
-              "haircare.html",
-              "serum-recommend.html",
-              "korean-serum.html",
-              "pore-serum.html",
-              "dry-skin-serum.html",
-              "face-pack-recommend.html",
-              "korean-cosme.html",
-              "beauty-device-recommend.html",
-              "haircare-recommend.html"
-          ]
+          git add *.html sitemap.xml
 
-          root = ET.Element(
-              "urlset",
-              {
-                  "xmlns": "http://www.sitemaps.org/schemas/sitemap/0.9"
-              }
-          )
-
-          for page in pages:
-              url = ET.SubElement(root, "url")
-              loc = ET.SubElement(url, "loc")
-              loc.text = base + page
-
-          tree = ET.ElementTree(root)
-          tree.write(
-              "sitemap.xml",
-              encoding="utf-8",
-              xml_declaration=True
-          )
-
-          print("sitemap.xml generated")
-          PY
-
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Generate SEO pages and sitemap"
+            git push
+          fi
+          
       - name: Commit SEO pages and sitemap
         run: |
           git config user.name "github-actions[bot]"
