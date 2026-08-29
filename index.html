@@ -268,35 +268,50 @@
 fetch("./products.json")
   .then(response => response.json())
   .then(data => {
-    const products = data.Items || [];
+
+    const products = data.items || [];
     const list = document.getElementById("product-list");
 
-    list.innerHTML = products.map(item => {
-      const p = item.Item;
+    if (products.length === 0) {
+      list.innerHTML = "<p>商品が見つかりませんでした。</p>";
+      return;
+    }
+
+    list.innerHTML = products.map(p => {
+
+      const image =
+        p.mediumImageUrls?.[0]?.imageUrl ||
+        p.smallImageUrls?.[0]?.imageUrl ||
+        "";
+
+      const name = p.itemName || "商品名";
+      const price = Number(p.itemPrice || 0).toLocaleString();
+      const url = p.affiliateUrl || p.itemUrl || "#";
 
       return `
-        <a href="${p.affiliateUrl || p.itemUrl}"
+        <a href="${url}"
            target="_blank"
            rel="noopener noreferrer"
            class="product-card">
 
-          <img src="${p.mediumImageUrls?.[0]?.imageUrl || ""}"
-               alt="${p.itemName}">
+          <img src="${image}" alt="${name}">
 
           <div>
-            <h3>${p.itemName}</h3>
-            <p>${Number(p.itemPrice).toLocaleString()}円</p>
+            <h3>${name}</h3>
+            <p>${price}円</p>
             <span>楽天市場で見る →</span>
           </div>
 
         </a>
       `;
+
     }).join("");
+
   })
   .catch(error => {
-    document.getElementById("product-list").textContent =
-      "商品を読み込めませんでした。";
     console.error(error);
+    document.getElementById("product-list").innerHTML =
+      "<p>商品を読み込めませんでした。</p>";
   });
 </script>
 
