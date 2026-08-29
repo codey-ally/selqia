@@ -259,5 +259,101 @@
   loadProducts();
 </script>
 
+  <section id="rakuten-products">
+  <h2>✨ PICK UP</h2>
+  <div id="product-list">商品を読み込み中…</div>
+</section>
+
+<script>
+fetch("./products.json")
+  .then(response => response.json())
+  .then(data => {
+    const products = data.Items || [];
+    const list = document.getElementById("product-list");
+
+    list.innerHTML = products.map(item => {
+      const p = item.Item;
+
+      return `
+        <a href="${p.affiliateUrl || p.itemUrl}"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="product-card">
+
+          <img src="${p.mediumImageUrls?.[0]?.imageUrl || ""}"
+               alt="${p.itemName}">
+
+          <div>
+            <h3>${p.itemName}</h3>
+            <p>${Number(p.itemPrice).toLocaleString()}円</p>
+            <span>楽天市場で見る →</span>
+          </div>
+
+        </a>
+      `;
+    }).join("");
+  })
+  .catch(error => {
+    document.getElementById("product-list").textContent =
+      "商品を読み込めませんでした。";
+    console.error(error);
+  });
+</script>
+
+<style>
+#rakuten-products {
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 20px;
+}
+
+#rakuten-products h2 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+#product-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.product-card {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  border-radius: 16px;
+  background: #fff;
+  text-decoration: none;
+  color: #333;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.product-card img {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+}
+
+.product-card h3 {
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+
+.product-card p {
+  font-weight: bold;
+}
+
+.product-card span {
+  font-size: 13px;
+}
+
+@media (max-width: 600px) {
+  #product-list {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
 </body>
 </html>
