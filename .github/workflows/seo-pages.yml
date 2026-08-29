@@ -216,16 +216,62 @@ jobs:
               print("Generated:", filename)
           PY
 
-      - name: Commit SEO pages
+            - name: Generate sitemap
+        run: |
+          python - <<'PY'
+          import xml.etree.ElementTree as ET
+
+          base = "https://codey-ally.github.io/selqia/"
+
+          pages = [
+              "",
+              "biyoueki.html",
+              "pack.html",
+              "cosme.html",
+              "beauty-device.html",
+              "haircare.html",
+              "serum-recommend.html",
+              "korean-serum.html",
+              "pore-serum.html",
+              "dry-skin-serum.html",
+              "face-pack-recommend.html",
+              "korean-cosme.html",
+              "beauty-device-recommend.html",
+              "haircare-recommend.html"
+          ]
+
+          root = ET.Element(
+              "urlset",
+              {
+                  "xmlns": "http://www.sitemaps.org/schemas/sitemap/0.9"
+              }
+          )
+
+          for page in pages:
+              url = ET.SubElement(root, "url")
+              loc = ET.SubElement(url, "loc")
+              loc.text = base + page
+
+          tree = ET.ElementTree(root)
+          tree.write(
+              "sitemap.xml",
+              encoding="utf-8",
+              xml_declaration=True
+          )
+
+          print("sitemap.xml generated")
+          PY
+
+      - name: Commit SEO pages and sitemap
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add *.html
+          git add *.html sitemap.xml
 
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Generate SEO pages"
+            git commit -m "Generate SEO pages and sitemap"
             git push
           fi
