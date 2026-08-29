@@ -163,6 +163,13 @@
 
 <header>
   <div class="logo">SELQIAN</div>
+  <nav class="category-nav">
+  <a href="./biyoueki.html">美容液</a>
+  <a href="./pack.html">フェイスパック</a>
+  <a href="./cosme.html">コスメ</a>
+  <a href="./beauty-device.html">美容家電</a>
+  <a href="./haircare.html">ヘアケア</a>
+</nav>
   <div class="sub">美容アイテムを、もっと選びやすく。</div>
 </header>
 
@@ -377,6 +384,24 @@ list.innerHTML = products.map(p => {
   });
 </script>
 
+  .category-nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 12px 15px;
+  background: #fff;
+  border-top: 1px solid #eee;
+}
+
+.category-nav a {
+  color: #333;
+  text-decoration: none;
+  font-size: 13px;
+  padding: 7px 12px;
+  border-radius: 20px;
+  background: #f5f5f5;
+}
 <style>
 #rakuten-products {
   max-width: 1000px;
