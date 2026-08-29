@@ -29,18 +29,19 @@ jobs:
           import urllib.request
           import urllib.error
           import time
+          from html import escape
 
-          keywords = [
-              "美容液",
-              "フェイスパック",
-              "コスメ",
-              "美容家電",
-              "ヘアケア"
-          ]
+          categories = {
+              "美容液": "biyoueki.html",
+              "フェイスパック": "pack.html",
+              "コスメ": "cosme.html",
+              "美容家電": "beauty-device.html",
+              "ヘアケア": "haircare.html"
+          }
 
           all_items = []
 
-          for keyword in keywords:
+          for keyword, filename in categories.items():
 
               params = {
                   "applicationId": os.environ["RAKUTEN_APP_ID"],
@@ -71,16 +72,20 @@ jobs:
                   with urllib.request.urlopen(request, timeout=30) as response:
                       data = json.load(response)
 
+                  products = []
+
                   for item in data.get("Items", []):
                       product = item.get("Item", {})
                       product["_category"] = keyword
+                      products.append(product)
                       all_items.append(product)
 
-                  print(keyword, ":", len(data.get("Items", [])))
+                  print(keyword, ":", len(products))
 
               except urllib.error.HTTPError as e:
                   print(keyword, "ERROR:", e.code)
                   print(e.read().decode("utf-8", errors="replace"))
+                  continue
 
               time.sleep(1)
 
@@ -95,16 +100,226 @@ jobs:
           print("TOTAL PRODUCTS:", len(all_items))
           PY
 
-      - name: Commit products.json
+      - name: Generate category pages
+        run: |
+          python - <<'PY'
+          import json
+          from html import escape
+
+          with open("products.json", encoding="utf-8") as f:
+              data = json.load(f)
+
+          categories = {
+              "美容液": "biyoueki.html",
+              "フェイスパック": "pack.html",
+              "コスメ": "cosme.html",
+              "美容家電": "beauty-device.html",
+              "ヘアケア": "haircare.html"
+          }
+
+          for category, filename in categories.items():
+
+              products = [
+                  p for p in data["items"]
+                  if p.get("_category") == category
+              ]
+
+              cards = ""
+
+              for p in products:
+
+                  image = (
+                      p.get("mediumImageUrls", [{}])[0].get("imageUrl", "")
+                      if p.get("mediumImageUrls")
+                      else ""
+                  )
+
+                  name = escape(p.get("itemName", "商品"))
+                  price = f'{int(p.get("itemPrice", 0)):,}'
+                  url = escape(
+                      p.get("affiliateUrl")
+                      or p.get("itemUrl")
+                      or "#"
+                  )
+
+                  cards += f"""
+                  <a class="card"
+                     href="{url}"
+                     target="_blank"
+                     rel="noopener noreferrer">
+
+                    <img src="{image}" alt="{name}">
+
+                    <div>
+                      <small>{category}</small>
+                      <h2>{name}</h2>
+                      <p class="price">¥{price}</p>
+                      <span>楽天市場で見る →</span>
+                    </div>
+
+                  </a>
+                  """
+
+              page = f"""<!DOCTYPE html>
+          <html lang="ja">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport"
+                  content="width=device-width, initial-scale=1.0">
+
+            <title>{category}おすすめ｜SELQIAN</title>
+
+            <meta name="description"
+                  content="SELQIANで{category}の商品をチェック。楽天市場の商品情報を比較して、自分に合うアイテムを探せます。">
+
+            <style>
+              * {{
+                box-sizing: border-box;
+              }}
+
+              body {{
+                margin: 0;
+                background: #fafafa;
+                color: #222;
+                font-family:
+                  -apple-system,
+                  BlinkMacSystemFont,
+                  "Noto Sans JP",
+                  sans-serif;
+              }}
+
+              header {{
+                padding: 22px;
+                background: white;
+                text-align: center;
+                border-bottom: 1px solid #eee;
+              }}
+
+              .logo {{
+                font-size: 26px;
+                font-weight: 800;
+                letter-spacing: 2px;
+              }}
+
+              .back {{
+                display: inline-block;
+                margin-top: 8px;
+                color: #777;
+                font-size: 12px;
+                text-decoration: none;
+              }}
+
+              main {{
+                max-width: 1100px;
+                margin: auto;
+                padding: 35px 20px 60px;
+              }}
+
+              .hero {{
+                text-align: center;
+                padding: 25px 10px 35px;
+              }}
+
+              .hero h1 {{
+                font-size: 30px;
+                margin: 0;
+              }}
+
+              .hero p {{
+                color: #777;
+              }}
+
+              .products {{
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 18px;
+              }}
+
+              .card {{
+                display: flex;
+                gap: 15px;
+                padding: 15px;
+                border-radius: 16px;
+                background: white;
+                color: #333;
+                text-decoration: none;
+                box-shadow:
+                  0 4px 15px rgba(0,0,0,.06);
+              }}
+
+              .card img {{
+                width: 110px;
+                height: 110px;
+                object-fit: contain;
+                flex-shrink: 0;
+              }}
+
+              .card h2 {{
+                font-size: 14px;
+                line-height: 1.5;
+                margin: 5px 0;
+              }}
+
+              .card small {{
+                color: #888;
+              }}
+
+              .price {{
+                font-weight: 800;
+              }}
+
+              @media (max-width: 600px) {{
+                .products {{
+                  grid-template-columns: 1fr;
+                }}
+              }}
+            </style>
+          </head>
+
+          <body>
+
+          <header>
+            <div class="logo">SELQIAN</div>
+            <a class="back" href="./index.html">
+              ← トップへ戻る
+            </a>
+          </header>
+
+          <main>
+
+            <section class="hero">
+              <h1>{category}おすすめ</h1>
+              <p>
+                楽天市場の{category}をチェック。
+              </p>
+            </section>
+
+            <section class="products">
+              {cards}
+            </section>
+
+          </main>
+
+          </body>
+          </html>
+          """
+
+              with open(filename, "w", encoding="utf-8") as f:
+                  f.write(page)
+
+              print("Generated:", filename)
+          PY
+
+      - name: Commit updates
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add products.json
+          git add products.json biyoueki.html pack.html cosme.html beauty-device.html haircare.html
 
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Update Rakuten products"
+            git commit -m "Update products and category pages"
             git push
           fi
