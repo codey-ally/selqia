@@ -33,7 +33,7 @@ jobs:
               "applicationId": os.environ["RAKUTEN_APP_ID"],
               "accessKey": os.environ["RAKUTEN_ACCESS_KEY"],
               "affiliateId": os.environ["RAKUTEN_AFFILIATE_ID"],
-              "keyword": "美容液",
+             "keyword": "美容液 フェイスパック",
               "format": "json",
               "hits": "30",
               "page": "1"
