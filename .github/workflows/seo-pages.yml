@@ -216,8 +216,10 @@ jobs:
               print("Generated:", filename)
           PY
 
-            - name: Generate sitemap
+      - name: Generate sitemap
         run: |
+          python - <<'PY'
+          import xml.etree.ElementTree as ET
           python - <<'PY'
           import xml.etree.ElementTree as ET
 
