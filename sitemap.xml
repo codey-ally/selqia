@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://codey-ally.github.io/selqia/</loc>
-  </url>
-  <url>
-    <loc>https://codey-ally.github.io/selqia/biyoueki.html</loc>
-  </url>
-  <url>
-    <loc>https://codey-ally.github.io/selqia/pack.html</loc>
-  </url>
-  <url>
-    <loc>https://codey-ally.github.io/selqia/cosme.html</loc>
-  </url>
-  <url>
-    <loc>https://codey-ally.github.io/selqia/beauty-device.html</loc>
-  </url>
-  <url>
-    <loc>https://codey-ally.github.io/selqia/haircare.html</loc>
-  </url>
+  <url><loc>https://codey-ally.github.io/selqia/</loc></url>
+  <url><loc>https://codey-ally.github.io/selqia/biyoueki.html</loc></url>
+  <url><loc>https://codey-ally.github.io/selqia/pack.html</loc></url>
+  <url><loc>https://codey-ally.github.io/selqia/cosme.html</loc></url>
+  <url><loc>https://codey-ally.github.io/selqia/beauty-device.html</loc></url>
+  <url><loc>https://codey-ally.github.io/selqia/haircare.html</loc></url>
+  <url><loc>https://codey-ally.github.io/selqia/serum-recommend.html</loc></url>
+  <url><loc>https://codey-ally.github.io/selqia/korean-serum.html</loc></url>
+  <url><loc>https://codey-ally.github.io/selqia/pore-serum.html</loc></url>
+  <url><loc>https://codey-ally.github.io/selqia/dry-skin-serum.html</loc></url>
+  <url><loc>https://codey-ally.github.io/selqia/face-pack-recommend.html</loc></url>
+  <url><loc>https://codey-ally.github.io/selqia/korean-cosme.html</loc></url>
+  <url><loc>https://codey-ally.github.io/selqia/beauty-device-recommend.html</loc></url>
+  <url><loc>https://codey-ally.github.io/selqia/haircare-recommend.html</loc></url>
 </urlset>
