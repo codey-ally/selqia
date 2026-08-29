@@ -308,9 +308,8 @@ jobs:
                   f.write(page)
 
               print("Generated:", filename)
-          PY
-
-                    PY
+                    python - <<'PY'
+                    
 
       - name: Generate sitemap
         run: |
