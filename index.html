@@ -277,35 +277,58 @@ fetch("./products.json")
       return;
     }
 
-    list.innerHTML = products.map(p => {
+list.innerHTML = products.map(p => {
 
-      const image =
-        p.mediumImageUrls?.[0]?.imageUrl ||
-        p.smallImageUrls?.[0]?.imageUrl ||
-        "";
+  const image =
+    p.mediumImageUrls?.[0]?.imageUrl ||
+    p.smallImageUrls?.[0]?.imageUrl ||
+    "";
 
-      const name = p.itemName || "商品名";
-      const price = Number(p.itemPrice || 0).toLocaleString();
-      const url = p.affiliateUrl || p.itemUrl || "#";
+  const name = p.itemName || "商品名";
+  const price = Number(p.itemPrice || 0).toLocaleString();
+  const url = p.affiliateUrl || p.itemUrl || "#";
 
-      return `
-        <a href="${url}"
-           target="_blank"
-           rel="noopener noreferrer"
-           class="product-card">
+  const category = p._category || "美容アイテム";
 
-          <img src="${image}" alt="${name}">
+  let recommendation = "";
 
-          <div>
-            <h3>${name}</h3>
-            <p>${price}円</p>
-            <span>楽天市場で見る →</span>
-          </div>
+  if (category === "美容液") {
+    recommendation = "スキンケアを重視したい人にチェックしてほしいアイテム。";
+  } else if (category === "フェイスパック") {
+    recommendation = "いつものスキンケアにプラスしたい人におすすめ。";
+  } else if (category === "コスメ") {
+    recommendation = "毎日のメイクアイテムを探している人におすすめ。";
+  } else if (category === "美容家電") {
+    recommendation = "おうち美容を充実させたい人にチェックしてほしいアイテム。";
+  } else if (category === "ヘアケア") {
+    recommendation = "ヘアケアアイテムを探している人におすすめ。";
+  }
 
-        </a>
-      `;
+  return `
+    <a href="${url}"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="product-card">
 
-    }).join("");
+      <img src="${image}" alt="${name}">
+
+      <div>
+        <small>${category}</small>
+        <h3>${name}</h3>
+
+        <p>${price}円</p>
+
+        <p class="recommendation">
+          💡 ${recommendation}
+        </p>
+
+        <span>楽天市場で見る →</span>
+      </div>
+
+    </a>
+  `;
+
+}).join("");
 
   })
   .catch(error => {
