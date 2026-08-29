@@ -3,166 +3,158 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SELQIA｜買う前に、選びやすく。</title>
-  <meta name="description" content="美容アイテムを比較して、自分に合う商品を見つけるためのサイト。">
+  <title>SELQIAN｜美容アイテムを探す</title>
+
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
+      margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif;
       background: #fafafa;
       color: #222;
-      line-height: 1.7;
     }
 
     header {
-      background: #fff;
+      padding: 24px 20px;
+      text-align: center;
+      background: white;
       border-bottom: 1px solid #eee;
-      padding: 18px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    .header-inner {
-      max-width: 1100px;
-      margin: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
 
     .logo {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: 800;
       letter-spacing: 2px;
     }
 
-    nav a {
-      color: #333;
-      text-decoration: none;
-      margin-left: 20px;
-      font-size: 14px;
-    }
-
-    .hero {
-      max-width: 1100px;
-      margin: 60px auto;
-      padding: 0 20px;
-    }
-
-    .hero h1 {
-      font-size: clamp(34px, 6vw, 64px);
-      line-height: 1.15;
-      margin-bottom: 20px;
-    }
-
-    .hero p {
-      color: #666;
-      font-size: 16px;
-      max-width: 600px;
-    }
-
-    .categories {
-      max-width: 1100px;
-      margin: 0 auto 60px;
-      padding: 0 20px;
-    }
-
-    .categories h2 {
-      margin-bottom: 20px;
-    }
-
-    .category-list {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-    }
-
-    .category {
-      background: #fff;
-      border: 1px solid #eee;
-      border-radius: 14px;
-      padding: 25px 15px;
-      text-align: center;
-      font-weight: 600;
-    }
-
-    .products {
-      max-width: 1100px;
-      margin: 0 auto 80px;
-      padding: 0 20px;
-    }
-
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .product {
-      background: #fff;
-      border: 1px solid #eee;
-      border-radius: 16px;
-      padding: 25px;
-    }
-
-    .product-image {
-      height: 180px;
-      background: #f1f1f1;
-      border-radius: 12px;
-      margin-bottom: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #999;
-    }
-
-    .product h3 {
-      margin-bottom: 8px;
-    }
-
-    .product p {
-      color: #666;
-      font-size: 14px;
-    }
-
-    .button {
-      display: inline-block;
-      margin-top: 18px;
-      padding: 10px 18px;
-      border-radius: 999px;
-      background: #222;
-      color: #fff;
-      text-decoration: none;
-      font-size: 14px;
-    }
-
-    footer {
-      background: #222;
-      color: #fff;
-      text-align: center;
-      padding: 30px 20px;
+    .sub {
+      margin-top: 6px;
+      color: #777;
       font-size: 13px;
     }
 
-    @media (max-width: 700px) {
-      .category-list {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    .hero {
+      padding: 55px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #fff, #f7f1f5);
+    }
 
-      .product-grid {
-        grid-template-columns: 1fr;
-      }
+    .hero h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.4;
+    }
 
-      nav {
-        display: none;
-      }
+    .hero p {
+      color: #777;
+      margin: 14px 0 0;
+    }
+
+    .search {
+      max-width: 600px;
+      margin: 25px auto 0;
+      display: flex;
+      gap: 8px;
+    }
+
+    .search input {
+      flex: 1;
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-size: 15px;
+    }
+
+    .search button {
+      padding: 0 20px;
+      border: 0;
+      border-radius: 12px;
+      background: #222;
+      color: white;
+      font-weight: bold;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 35px 20px 60px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    #products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(0,0,0,.06);
+      transition: .2s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+    }
+
+    .card img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      background: #fff;
+    }
+
+    .info {
+      padding: 15px;
+    }
+
+    .name {
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 42px;
+    }
+
+    .price {
+      margin-top: 10px;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .button {
+      display: block;
+      margin-top: 12px;
+      padding: 11px;
+      text-align: center;
+      background: #222;
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .loading,
+    .empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: #777;
+    }
+
+    footer {
+      padding: 30px;
+      text-align: center;
+      background: white;
+      color: #999;
+      font-size: 12px;
     }
   </style>
 </head>
@@ -170,80 +162,102 @@
 <body>
 
 <header>
-  <div class="header-inner">
-    <div class="logo">SELQIA</div>
-    <nav>
-      <a href="#">TOP</a>
-      <a href="#categories">CATEGORY</a>
-      <a href="#products">PICK UP</a>
-    </nav>
-  </div>
+  <div class="logo">SELQIAN</div>
+  <div class="sub">美容アイテムを、もっと選びやすく。</div>
 </header>
 
+<section class="hero">
+  <h1>欲しい美容アイテムを<br>かんたんに見つける</h1>
+  <p>楽天市場の美容アイテムをチェック</p>
+
+  <div class="search">
+    <input id="keyword" type="text" placeholder="美容液・パック・ヘアケアなど">
+    <button onclick="searchProducts()">検索</button>
+  </div>
+</section>
+
 <main>
+  <h2 class="section-title">おすすめ美容アイテム</h2>
 
-  <section class="hero">
-    <h1>買う前に、<br>選びやすく。</h1>
-    <p>
-      SELQIAは、美容アイテムを比較して、
-      自分に合う商品を見つけるためのサイトです。
-    </p>
-  </section>
-
-  <section class="categories" id="categories">
-    <h2>Category</h2>
-
-    <div class="category-list">
-      <div class="category">スキンケア</div>
-      <div class="category">コスメ</div>
-      <div class="category">美容家電</div>
-      <div class="category">ヘアケア</div>
-    </div>
-  </section>
-
-  <section class="products" id="products">
-    <h2>Pick Up</h2>
-
-    <div class="product-grid">
-
-      <article class="product">
-        <div class="product-image">PRODUCT</div>
-        <h3>おすすめ美容アイテム</h3>
-        <p>
-          商品情報や特徴を比較して、
-          自分に合うアイテムを探せます。
-        </p>
-        <a href="#" class="button">楽天で見る</a>
-      </article>
-
-      <article class="product">
-        <div class="product-image">PRODUCT</div>
-        <h3>人気スキンケア</h3>
-        <p>
-          人気の商品を比較しながら
-          お気に入りを見つけよう。
-        </p>
-        <a href="#" class="button">楽天で見る</a>
-      </article>
-
-      <article class="product">
-        <div class="product-image">PRODUCT</div>
-        <h3>美容家電</h3>
-        <p>
-          気になる美容家電を
-          まとめてチェック。
-        </p>
-        <a href="#" class="button">楽天で見る</a>
-      </article>
-
-    </div>
-  </section>
-
+  <div id="products">
+    <div class="loading">商品を読み込んでいます…</div>
+  </div>
 </main>
 
 <footer>
-  © SELQIA
+  © SELQIAN
 </footer>
+
+<script>
+  async function loadProducts(keyword = "美容液") {
+    const container = document.getElementById("products");
+
+    try {
+      const response = await fetch("products.json");
+
+      if (!response.ok) {
+        throw new Error("products.json not found");
+      }
+
+      const data = await response.json();
+
+      const products = data.items || [];
+
+      if (products.length === 0) {
+        container.innerHTML =
+          '<div class="empty">商品が見つかりませんでした。</div>';
+        return;
+      }
+
+      container.innerHTML = products.map(item => {
+
+        const image =
+          item.mediumImageUrls?.[0]?.imageUrl ||
+          item.smallImageUrls?.[0]?.imageUrl ||
+          "";
+
+        const name = item.itemName || "商品名なし";
+        const price = Number(item.itemPrice || 0).toLocaleString();
+        const url = item.affiliateUrl || item.itemUrl || "#";
+
+        return `
+          <article class="card">
+            <img src="${image}" alt="${name}">
+            <div class="info">
+              <div class="name">${name}</div>
+              <div class="price">¥${price}</div>
+              <a class="button"
+                 href="${url}"
+                 target="_blank"
+                 rel="noopener noreferrer">
+                楽天市場で見る
+              </a>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+    } catch (error) {
+      container.innerHTML =
+        '<div class="empty">商品データを準備中です。</div>';
+    }
+  }
+
+  function searchProducts() {
+    const keyword = document.getElementById("keyword").value.trim();
+
+    if (!keyword) {
+      loadProducts();
+      return;
+    }
+
+    // 次の自動取得システム完成後、
+    // キーワード検索にも対応させます。
+    loadProducts(keyword);
+  }
+
+  loadProducts();
+</script>
 
 </body>
 </html>
