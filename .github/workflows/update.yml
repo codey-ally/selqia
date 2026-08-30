@@ -39,7 +39,7 @@ jobs:
               "ヘアケア": "haircare.html"
           }
 
-                  all_items = []
+          all_items = []
 
           search_keywords = {
               "美容液": ["韓国美容液", "韓国 スキンケア", "韓国 エイジングケア"],
@@ -61,22 +61,23 @@ jobs:
                       "hits": "30",
                       "page": "1"
                   }
-              url = (
-                  "https://openapi.rakuten.co.jp/"
-                  "ichibams/api/IchibaItem/Search/20260701?"
-                  + urllib.parse.urlencode(params)
-              )
 
-              request = urllib.request.Request(
-                  url,
-                  headers={
-                      "User-Agent": "SELQIAN",
-                      "Origin": "https://codey-ally.github.io",
-                      "Referer": "https://codey-ally.github.io/selqia/"
-                  }
-              )
+                  url = (
+                      "https://openapi.rakuten.co.jp/"
+                      "ichibams/api/IchibaItem/Search/20260701?"
+                      + urllib.parse.urlencode(params)
+                  )
 
-              try:
+                  request = urllib.request.Request(
+                      url,
+                      headers={
+                          "User-Agent": "SELQIAN",
+                          "Origin": "https://codey-ally.github.io",
+                          "Referer": "https://codey-ally.github.io/selqia/"
+                      }
+                  )
+
+                  try:
                   with urllib.request.urlopen(request, timeout=30) as response:
                       data = json.load(response)
 
