@@ -579,20 +579,23 @@ const questions = [
     ]
   },
 
-  {
-    id: "concern",
-    title: "一番気になるところは？",
-    note: "",
-    options: [
-      ["👀 目を大きく見せたい", "eyes"],
-      ["✨ 小顔に見せたい", "smallFace"],
-      ["🤎 エラを自然に整えたい", "jaw"],
-      ["👃 鼻をすっきり見せたい", "nose"],
-      ["🌸 垢抜けたい", "refresh"],
-      ["💗 自分に似合う色を知りたい", "color"]
-    ]
-  }
-
+ {
+  id: "concern",
+  title: "どんな印象にしたい？",
+  note: "なりたい雰囲気に近いものを選んでね♡",
+  options: [
+    ["👀 目元を印象的にしたい", "eyes"],
+    ["✨ すっきりした印象にしたい", "smallFace"],
+    ["🌸 やわらかく見せたい", "soft"],
+    ["💗 小顔っぽく見せたい", "smallFace"],
+    ["👃 鼻筋をきれいに見せたい", "nose"],
+    ["💋 唇を印象的にしたい", "lips"],
+    ["🎀 かわいらしく見せたい", "cute"],
+    ["🖤 大人っぽく見せたい", "adult"],
+    ["🇰🇷 韓国っぽくしたい", "korean"],
+    ["✨ 垢抜けた印象にしたい", "refresh"]
+  ]
+},
 ];
 
 let currentQuestion = 0;
@@ -869,10 +872,20 @@ function showResult() {
   let makeupText =
     "自分の特徴を隠しすぎず、得意な部分を活かすメイクを意識してみて♡";
 
-  if (answers.concern === "jaw") {
-    makeupText =
-      "エラが気になるなら、エラ部分を濃く囲むのではなく、耳の前からフェイスラインに沿って薄くシェーディング。境目をしっかりぼかすのがポイント。";
-  }
+if (answers.concern === "smallFace") {
+  makeupText =
+    "フェイスラインを自然に整えたいなら、輪郭に沿って薄くシェーディングを入れ、顔の中心に自然な明るさを残すのがおすすめ。";
+}
+
+if (answers.concern === "soft") {
+  makeupText =
+    "やわらかな印象にしたいなら、チークやリップをふんわり仕上げて、目元も強くしすぎないのがおすすめ♡";
+}
+
+if (answers.concern === "lips") {
+  makeupText =
+    "唇を印象的にしたいなら、リップの色だけでなく、中央に少しツヤを足して立体感を出すのがおすすめ。";
+}
 
   if (answers.concern === "eyes") {
     makeupText =
