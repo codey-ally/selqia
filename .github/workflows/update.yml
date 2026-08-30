@@ -39,7 +39,7 @@ jobs:
               "ヘアケア": "haircare.html"
           }
 
-          all_items = []
+                  all_items = []
 
           search_keywords = {
               "美容液": ["韓国美容液", "韓国 スキンケア", "韓国 エイジングケア"],
@@ -49,19 +49,18 @@ jobs:
               "ヘアケア": ["韓国 ヘアケア", "韓国 シャンプー", "韓国 ヘアパック"]
           }
 
-                for category, filename in categories.items():
+          for category, filename in categories.items():
               for keyword in search_keywords[category]:
 
-              params = {
-                  "applicationId": os.environ["RAKUTEN_APP_ID"],
-                  "accessKey": os.environ["RAKUTEN_ACCESS_KEY"],
-                  "affiliateId": os.environ["RAKUTEN_AFFILIATE_ID"],
-                  "keyword": keyword,
-                  "format": "json",
-                  "hits": "30",
-                  "page": "1"
-              }
-
+                  params = {
+                      "applicationId": os.environ["RAKUTEN_APP_ID"],
+                      "accessKey": os.environ["RAKUTEN_ACCESS_KEY"],
+                      "affiliateId": os.environ["RAKUTEN_AFFILIATE_ID"],
+                      "keyword": keyword,
+                      "format": "json",
+                      "hits": "30",
+                      "page": "1"
+                  }
               url = (
                   "https://openapi.rakuten.co.jp/"
                   "ichibams/api/IchibaItem/Search/20260701?"
