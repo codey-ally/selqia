@@ -422,6 +422,16 @@
         <p id="shoppingResult"></p>
 
         <div id="resultTags" class="tags"></div>
+        <div class="result-card">
+  <h3>🛍️ あなたにおすすめのアイテム</h3>
+  <p class="recommend-sub">
+    診断結果に合わせて、あなたに合いそうなアイテムを選びました♡
+  </p>
+
+  <div id="recommendedProducts">
+    <p>おすすめ商品を探しています…</p>
+  </div>
+</div>
       </div>
 
       <button class="restart-btn" onclick="restartDiagnosis()">
@@ -945,6 +955,8 @@ if (answers.concern === "lips") {
 
 
   const tags = document.getElementById("resultTags");
+  showRecommendedProducts();
+  
 
   tags.innerHTML = "";
 
@@ -971,6 +983,90 @@ if (answers.concern === "lips") {
 
 }
 
+  async function showRecommendedProducts() {
+  const box = document.getElementById("recommendedProducts");
+
+  if (!box) return;
+
+  try {
+    const response = await fetch("./products.json");
+    const data = await response.json();
+
+    let products = data.items || [];
+
+    // 予算に合わせて商品を絞る
+    if (answers.budget === "low") {
+      products = products.filter(p => Number(p.itemPrice) <= 2000);
+    }
+
+    if (answers.budget === "mid") {
+      products = products.filter(p => Number(p.itemPrice) <= 5000);
+    }
+
+    if (answers.budget === "high") {
+      products = products.filter(p => Number(p.itemPrice) >= 2000);
+    }
+
+    // 商品が少ない場合は全商品から表示
+    if (products.length < 3) {
+      products = data.items || [];
+    }
+
+    // 最大6商品
+    products = products.slice(0, 6);
+
+    box.innerHTML = products.map(p => {
+      const image =
+        p.mediumImageUrls?.[0]?.imageUrl || "";
+
+      const name =
+        escapeHtml(p.itemName || "おすすめアイテム");
+
+      const price =
+        Number(p.itemPrice || 0).toLocaleString();
+
+      const url =
+        p.affiliateUrl || p.itemUrl || "#";
+
+      return `
+        <a class="recommend-product"
+           href="${url}"
+           target="_blank"
+           rel="noopener noreferrer">
+
+          <img src="${image}" alt="${name}">
+
+          <div class="recommend-info">
+            <small>${p._category || "コスメ"}</small>
+
+            <h4>${name}</h4>
+
+            <p class="recommend-price">
+              ¥${price}
+            </p>
+
+            <span>
+              楽天市場で見る →
+            </span>
+          </div>
+
+        </a>
+      `;
+    }).join("");
+
+  } catch (error) {
+    console.error("商品取得エラー:", error);
+
+    box.innerHTML =
+      "<p>おすすめ商品を読み込めませんでした。</p>";
+  }
+}
+
+function escapeHtml(text) {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
 
 function restartDiagnosis() {
 
