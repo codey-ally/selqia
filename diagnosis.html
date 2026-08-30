@@ -955,7 +955,6 @@ if (answers.concern === "lips") {
 
 
   const tags = document.getElementById("resultTags");
-  showRecommendedProducts();
   
 
   tags.innerHTML = "";
@@ -981,164 +980,361 @@ if (answers.concern === "lips") {
 
   });
 
-  showRwcommendedProducts();
   
 }
 
   async function showRecommendedProducts() {
-  const box = document.getElementById("recommendedProducts");
 
-  if (!box) return;
+    const box = document.getElementById("recommendedProducts");
 
-  try {
-    const response = await fetch("./products.json");
-    const data = await response.json();
+    if (!box) return;
 
-    let products = data.items || [];
+    try {
 
-    // 予算に合わせて商品を絞る
-    let products = data.items || [];
+      const response = await fetch("./products.json");
+      const data = await response.json();
 
-    // 年代・予算・雰囲気に合わせて商品を選ぶ
-    const age = answers.age;
-    const budget = answers.budget;
-    const mood = answers.mood;
+      let products = data.items || [];
 
-    // 予算
-    if (budget === "low") {
-      products = products.filter(p =>
-        Number(p.itemPrice || 0) <= 2000
-      );
-    }
+      const age = answers.age;
+      const budget = answers.budget;
+      const color = answers.color;
+      const mood = answers.mood;
 
-    if (budget === "midlow") {
-      products = products.filter(p =>
-        Number(p.itemPrice || 0) <= 3500
-      );
-    }
+      /*
+       * =========================
+       * ① 年齢
+       * =========================
+       */
 
-    if (budget === "mid") {
-      products = products.filter(p =>
-        Number(p.itemPrice || 0) <= 8000
-      );
-    }
+      const youngAges = ["age1", "age2", "age3", "age4"];
+      const adultAges = ["age5", "age6"];
+      const matureAges = ["age7", "age8"];
 
-    if (budget === "high") {
-      products = products.filter(p =>
-        Number(p.itemPrice || 0) >= 2000
-      );
-    }
+      /*
+       * =========================
+       * ② 予算
+       * =========================
+       */
 
-    // 20代は韓国コスメ・プチプラを優先
-    if (
-      ["age1", "age2", "age3", "age4"].includes(age)
-    ) {
-      const youngProducts = products.filter(p => {
+      if (budget === "low") {
 
-        const name = (p.itemName || "").toLowerCase();
+        products = products.filter(p =>
+          Number(p.itemPrice || 0) <= 2000
+        );
+
+      }
+
+      if (budget === "midlow") {
+
+        products = products.filter(p =>
+          Number(p.itemPrice || 0) <= 3500
+        );
+
+      }
+
+      if (budget === "mid") {
+
+        products = products.filter(p =>
+          Number(p.itemPrice || 0) <= 8000
+        );
+
+      }
+
+      if (budget === "high") {
+
+        products = products.filter(p =>
+          Number(p.itemPrice || 0) >= 2000
+        );
+
+      }
+
+      /*
+       * =========================
+       * ③ 商品名から韓国コスメ判定
+       * =========================
+       */
+
+      const isKorean = p => {
+
+        const name =
+          (p.itemName || "").toLowerCase();
 
         return (
           name.includes("韓国") ||
-          name.includes("キャンメイク") ||
-          name.includes("セザンヌ") ||
           name.includes("rom&nd") ||
           name.includes("ロムアンド") ||
           name.includes("dasique") ||
           name.includes("デイジーク") ||
           name.includes("peripera") ||
+          name.includes("ペリペラ") ||
           name.includes("hince") ||
-          name.includes("clio")
+          name.includes("ヒンス") ||
+          name.includes("clio") ||
+          name.includes("クリオ") ||
+          name.includes("wakemake") ||
+          name.includes("ウェイクメイク") ||
+          name.includes("amuse") ||
+          name.includes("アミューズ") ||
+          name.includes("fwee") ||
+          name.includes("フィー")
         );
 
-      });
+      };
 
-      if (youngProducts.length >= 3) {
-        products = youngProducts;
+      /*
+       * =========================
+       * ④ 年代による優先順位
+       * =========================
+       */
+
+      let priorityProducts = [];
+
+      if (youngAges.includes(age)) {
+
+        // 20代 → 韓国コスメ・プチプラ優先
+
+        priorityProducts = products.filter(p => {
+
+          const price =
+            Number(p.itemPrice || 0);
+
+          return (
+            isKorean(p) ||
+            price <= 2500
+          );
+
+        });
+
+      } else if (adultAges.includes(age)) {
+
+        // 30代 → 大人っぽい韓国コスメ優先
+
+        priorityProducts = products.filter(p => {
+
+          const price =
+            Number(p.itemPrice || 0);
+
+          return (
+            isKorean(p) ||
+            price >= 2500
+          );
+
+        });
+
+      } else if (matureAges.includes(age)) {
+
+        // 40代以降 → 韓国コスメ＋高価格帯
+
+        priorityProducts = products.filter(p => {
+
+          const price =
+            Number(p.itemPrice || 0);
+
+          return (
+            isKorean(p) ||
+            price >= 4000
+          );
+
+        });
+
+      } else {
+
+        priorityProducts = products;
+
       }
-    }
 
-    // なりたい雰囲気を優先
-    if (mood === "korean") {
+      /*
+       * =========================
+       * ⑤ なりたい雰囲気
+       * =========================
+       */
 
-      const koreanProducts = products.filter(p => {
+      if (mood === "korean") {
 
-        const name = (p.itemName || "").toLowerCase();
+        const koreanProducts =
+          priorityProducts.filter(p => isKorean(p));
 
-        return (
-          name.includes("韓国") ||
-          name.includes("rom&nd") ||
-          name.includes("ロムアンド") ||
-          name.includes("dasique") ||
-          name.includes("デイジーク") ||
-          name.includes("peripera") ||
-          name.includes("hince") ||
-          name.includes("clio")
-        );
+        if (koreanProducts.length >= 3) {
 
-      });
+          priorityProducts = koreanProducts;
 
-      if (koreanProducts.length >= 3) {
-        products = koreanProducts;
+        }
+
       }
+
+      /*
+       * =========================
+       * ⑥ パーソナルカラー
+       * =========================
+       */
+
+      const colorWords = {
+
+        spring: [
+          "コーラル",
+          "ピーチ",
+          "オレンジ",
+          "ベージュ",
+          "ウォーム"
+        ],
+
+        summer: [
+          "ローズ",
+          "モーヴ",
+          "ピンク",
+          "ラベンダー",
+          "ブルー"
+        ],
+
+        autumn: [
+          "ブラウン",
+          "テラコッタ",
+          "オレンジ",
+          "カーキ",
+          "ベージュ"
+        ],
+
+        winter: [
+          "ワイン",
+          "レッド",
+          "ローズ",
+          "ピンク",
+          "プラム"
+        ]
+
+      };
+
+      if (
+        color !== "unknown" &&
+        colorWords[color]
+      ) {
+
+        const words =
+          colorWords[color];
+
+        const colorProducts =
+          priorityProducts.filter(p => {
+
+            const name =
+              (p.itemName || "").toLowerCase();
+
+            return words.some(word =>
+              name.includes(word.toLowerCase())
+            );
+
+          });
+
+        if (colorProducts.length >= 2) {
+
+          priorityProducts = colorProducts;
+
+        }
+
+      }
+
+      /*
+       * =========================
+       * ⑦ 商品が少なすぎる場合
+       * =========================
+       */
+
+      if (priorityProducts.length < 3) {
+
+        priorityProducts = products;
+
+      }
+
+      /*
+       * =========================
+       * ⑧ 最大6商品
+       * =========================
+       */
+
+      priorityProducts =
+        priorityProducts.slice(0, 6);
+
+      /*
+       * =========================
+       * ⑨ 表示
+       * =========================
+       */
+
+      box.innerHTML =
+        priorityProducts.map(p => {
+
+          const image =
+            p.mediumImageUrls?.[0]?.imageUrl || "";
+
+          const name =
+            escapeHtml(
+              p.itemName ||
+              "おすすめアイテム"
+            );
+
+          const price =
+            Number(
+              p.itemPrice || 0
+            ).toLocaleString();
+
+          const url =
+            p.affiliateUrl ||
+            p.itemUrl ||
+            "#";
+
+          return `
+
+            <a
+              class="recommend-product"
+              href="${url}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+
+              <img
+                src="${image}"
+                alt="${name}"
+              >
+
+              <div class="recommend-info">
+
+                <small>
+                  ${p._category || "コスメ"}
+                </small>
+
+                <h4>
+                  ${name}
+                </h4>
+
+                <p class="recommend-price">
+                  ¥${price}
+                </p>
+
+                <span>
+                  楽天市場で見る →
+                </span>
+
+              </div>
+
+            </a>
+
+          `;
+
+        }).join("");
+
+    } catch (error) {
+
+      console.error(
+        "商品取得エラー:",
+        error
+      );
+
+      box.innerHTML =
+        "<p>おすすめ商品を読み込めませんでした。</p>";
+
     }
 
-    // 最大6商品
-    products = products.slice(0, 6);
-
-    // 商品が少ない場合は全商品から表示
-    if (products.length < 3) {
-      products = data.items || [];
-    }
-
-    // 最大6商品
-    products = products.slice(0, 6);
-
-    box.innerHTML = products.map(p => {
-      const image =
-        p.mediumImageUrls?.[0]?.imageUrl || "";
-
-      const name =
-        escapeHtml(p.itemName || "おすすめアイテム");
-
-      const price =
-        Number(p.itemPrice || 0).toLocaleString();
-
-      const url =
-        p.affiliateUrl || p.itemUrl || "#";
-
-      return `
-        <a class="recommend-product"
-           href="${url}"
-           target="_blank"
-           rel="noopener noreferrer">
-
-          <img src="${image}" alt="${name}">
-
-          <div class="recommend-info">
-            <small>${p._category || "コスメ"}</small>
-
-            <h4>${name}</h4>
-
-            <p class="recommend-price">
-              ¥${price}
-            </p>
-
-            <span>
-              楽天市場で見る →
-            </span>
-          </div>
-
-        </a>
-      `;
-    }).join("");
-
-  } catch (error) {
-    console.error("商品取得エラー:", error);
-
-    box.innerHTML =
-      "<p>おすすめ商品を読み込めませんでした。</p>";
   }
-}
 
 function escapeHtml(text) {
   const div = document.createElement("div");
