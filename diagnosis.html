@@ -1,1 +1,980 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>BEAUTY CHECK｜SELQIAN</title>
+
+  <meta name="description"
+        content="年齢・予算・パーソナルカラー・顔の特徴から、あなたに似合いやすいメイクを提案するSELQIAN BEAUTY CHECK。">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #faf8fa;
+      color: #292329;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Noto Sans JP",
+        sans-serif;
+    }
+
+    header {
+      background: #fff;
+      text-align: center;
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 3px;
+    }
+
+    .sub-logo {
+      font-size: 10px;
+      color: #999;
+      letter-spacing: 2px;
+      margin-top: 4px;
+    }
+
+    main {
+      max-width: 720px;
+      margin: auto;
+      padding: 25px 18px 60px;
+    }
+
+    .intro {
+      text-align: center;
+      padding: 35px 10px 25px;
+    }
+
+    .intro-badge {
+      display: inline-block;
+      padding: 7px 14px;
+      border-radius: 30px;
+      background: #f3e8f0;
+      color: #9b6686;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .intro h1 {
+      font-size: 30px;
+      line-height: 1.4;
+      margin: 18px 0 10px;
+    }
+
+    .intro p {
+      color: #777;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+    .start-btn,
+    .next-btn,
+    .restart-btn {
+      border: 0;
+      cursor: pointer;
+      border-radius: 50px;
+      font-weight: 800;
+    }
+
+    .start-btn {
+      width: 100%;
+      padding: 17px;
+      margin-top: 18px;
+      background: #292329;
+      color: white;
+      font-size: 15px;
+    }
+
+    .progress-wrap {
+      margin: 10px 0 25px;
+    }
+
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #999;
+      margin-bottom: 7px;
+    }
+
+    .progress {
+      height: 5px;
+      background: #eee;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background: #c28cac;
+      transition: .3s;
+    }
+
+    .question {
+      background: white;
+      border-radius: 24px;
+      padding: 25px 18px;
+      box-shadow: 0 6px 25px rgba(0,0,0,.05);
+    }
+
+    .question h2 {
+      text-align: center;
+      font-size: 21px;
+      margin: 5px 0 8px;
+    }
+
+    .question-note {
+      text-align: center;
+      color: #999;
+      font-size: 12px;
+      margin-bottom: 22px;
+    }
+
+    .options {
+      display: grid;
+      gap: 11px;
+    }
+
+    .option {
+      width: 100%;
+      padding: 17px 15px;
+      border: 1.5px solid #eee;
+      border-radius: 16px;
+      background: white;
+      text-align: left;
+      cursor: pointer;
+      font-size: 14px;
+      transition: .2s;
+    }
+
+    .option:hover,
+    .option.selected {
+      border-color: #c28cac;
+      background: #fcf5fa;
+    }
+
+    .option-title {
+      font-weight: 800;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .option-desc {
+      color: #999;
+      font-size: 11px;
+    }
+
+    .visual-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .visual-option {
+      border: 1.5px solid #eee;
+      background: white;
+      border-radius: 18px;
+      padding: 14px 8px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .visual-option.selected {
+      border-color: #c28cac;
+      background: #fcf5fa;
+    }
+
+    .face-icon {
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 55px;
+      margin-bottom: 7px;
+    }
+
+    .visual-label {
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .next-btn {
+      width: 100%;
+      margin-top: 20px;
+      padding: 16px;
+      background: #292329;
+      color: white;
+      font-size: 14px;
+    }
+
+    .next-btn:disabled {
+      opacity: .35;
+      cursor: not-allowed;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .result {
+      background: white;
+      border-radius: 25px;
+      padding: 28px 20px;
+      box-shadow: 0 6px 25px rgba(0,0,0,.05);
+    }
+
+    .result-top {
+      text-align: center;
+    }
+
+    .result-label {
+      color: #b07196;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .result h2 {
+      font-size: 28px;
+      margin: 10px 0;
+    }
+
+    .result-intro {
+      color: #777;
+      line-height: 1.8;
+      font-size: 13px;
+    }
+
+    .result-card {
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 18px;
+      background: #faf7fa;
+    }
+
+    .result-card h3 {
+      margin: 0 0 10px;
+      font-size: 15px;
+    }
+
+    .result-card p {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .tag {
+      padding: 7px 10px;
+      border-radius: 20px;
+      background: white;
+      border: 1px solid #eee;
+      font-size: 11px;
+    }
+
+    .restart-btn {
+      width: 100%;
+      padding: 15px;
+      margin-top: 22px;
+      background: #292329;
+      color: white;
+    }
+
+    @media (max-width: 500px) {
+      .intro h1 {
+        font-size: 26px;
+      }
+
+      .visual-options {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">SELQIAN</div>
+  <div class="sub-logo">BEAUTY CHECK</div>
+</header>
+
+<main>
+
+  <!-- START -->
+  <section id="startScreen" class="intro">
+
+    <span class="intro-badge">SELQIAN BEAUTY CHECK</span>
+
+    <h1>
+      あなたに似合う<br>
+      美容を見つけよ♡
+    </h1>
+
+    <p>
+      年齢・予算・カラー・顔の特徴などから<br>
+      あなた向けのメイクを提案します。
+    </p>
+
+    <button class="start-btn" onclick="startDiagnosis()">
+      診断スタート →
+    </button>
+
+  </section>
+
+
+  <!-- QUIZ -->
+  <section id="quizScreen" class="hidden">
+
+    <div class="progress-wrap">
+      <div class="progress-text">
+        <span id="stepText">STEP 1</span>
+        <span id="progressPercent">0%</span>
+      </div>
+
+      <div class="progress">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+    </div>
+
+    <div class="question">
+
+      <h2 id="questionTitle"></h2>
+
+      <p id="questionNote" class="question-note"></p>
+
+      <div id="options" class="options"></div>
+
+      <button id="nextButton"
+              class="next-btn"
+              onclick="nextQuestion()"
+              disabled>
+        次へ →
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- RESULT -->
+  <section id="resultScreen" class="hidden">
+
+    <div class="result">
+
+      <div class="result-top">
+
+        <div class="result-label">
+          YOUR BEAUTY STYLE
+        </div>
+
+        <h2 id="resultTitle"></h2>
+
+        <p id="resultIntro" class="result-intro"></p>
+
+      </div>
+
+      <div class="result-card">
+        <h3>🎨 似合いやすいカラー</h3>
+        <p id="colorResult"></p>
+      </div>
+
+      <div class="result-card">
+        <h3>👀 目元メイク</h3>
+        <p id="eyeResult"></p>
+      </div>
+
+      <div class="result-card">
+        <h3>✨ 輪郭メイク</h3>
+        <p id="faceResult"></p>
+      </div>
+
+      <div class="result-card">
+        <h3>💄 あなたへのメイク提案</h3>
+        <p id="makeupResult"></p>
+      </div>
+
+      <div class="result-card">
+        <h3>🛍 おすすめの選び方</h3>
+        <p id="shoppingResult"></p>
+
+        <div id="resultTags" class="tags"></div>
+      </div>
+
+      <button class="restart-btn" onclick="restartDiagnosis()">
+        もう一度診断する
+      </button>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<script>
+
+const questions = [
+
+  {
+    id: "age",
+    title: "何歳？",
+    note: "年代に合わせておすすめを変えるよ♡",
+    options: [
+      ["18〜19歳", "age1"],
+      ["20〜22歳", "age2"],
+      ["23〜25歳", "age3"],
+      ["26〜29歳", "age4"],
+      ["30〜34歳", "age5"],
+      ["35〜39歳", "age6"],
+      ["40〜49歳", "age7"],
+      ["50歳〜", "age8"]
+    ]
+  },
+
+  {
+    id: "budget",
+    title: "美容アイテムの予算は？",
+    note: "無理なく買える価格帯を選んでね♡",
+    options: [
+      ["🩷 できるだけ安く", "low"],
+      ["💗 ちょいプラならOK", "midlow"],
+      ["💜 ちょっと良いものも使いたい", "mid"],
+      ["✨ 価格より質重視", "high"]
+    ]
+  },
+
+  {
+    id: "color",
+    title: "パーソナルカラー分かる？",
+    note: "分からなくても大丈夫！",
+    options: [
+      ["🌸 イエベ春", "spring"],
+      ["🌊 ブルベ夏", "summer"],
+      ["🍂 イエベ秋", "autumn"],
+      ["❄️ ブルベ冬", "winter"],
+      ["🤍 分からない", "unknown"]
+    ]
+  },
+
+  {
+    id: "eyeType",
+    title: "一番近い目元は？",
+    note: "イラストを参考に近いものを選んでね",
+    visual: true,
+    options: [
+      ["一重", "single"],
+      ["奥二重", "hooded"],
+      ["二重", "double"],
+      ["分からない", "unknown"]
+    ]
+  },
+
+  {
+    id: "eyeSize",
+    title: "目の大きさは？",
+    note: "",
+    options: [
+      ["小さめ", "small"],
+      ["普通", "normal"],
+      ["大きめ", "large"]
+    ]
+  },
+
+  {
+    id: "eyeShape",
+    title: "目の形はどれに近い？",
+    note: "",
+    options: [
+      ["丸め", "round"],
+      ["横長", "long"],
+      ["たれ目", "down"],
+      ["つり目", "up"]
+    ]
+  },
+
+  {
+    id: "face",
+    title: "顔の輪郭はどれに近い？",
+    note: "鏡を見ながら選んでみて♡",
+    visual: true,
+    options: [
+      ["丸顔", "roundFace"],
+      ["卵型", "oval"],
+      ["面長", "longFace"],
+      ["ベース型・エラ", "square"],
+      ["逆三角", "heart"]
+    ]
+  },
+
+  {
+    id: "nose",
+    title: "鼻の特徴は？",
+    note: "一番近いものを選んでね",
+    options: [
+      ["小さめ", "smallNose"],
+      ["鼻筋が目立つ", "straightNose"],
+      ["鼻先が丸め", "roundNose"],
+      ["普通・よく分からない", "normalNose"]
+    ]
+  },
+
+  {
+    id: "lips",
+    title: "唇の厚みは？",
+    note: "",
+    options: [
+      ["薄め", "thin"],
+      ["普通", "normalLips"],
+      ["ふっくら", "full"]
+    ]
+  },
+
+  {
+    id: "brows",
+    title: "眉の形は？",
+    note: "",
+    options: [
+      ["平行眉", "straight"],
+      ["アーチ眉", "arch"],
+      ["太め", "thick"],
+      ["細め", "thinBrow"]
+    ]
+  },
+
+  {
+    id: "mood",
+    title: "どんな雰囲気になりたい？",
+    note: "複数ではなく、一番なりたいものを選んでね♡",
+    options: [
+      ["🇰🇷 韓国っぽい", "korean"],
+      ["🎀 かわいい", "cute"],
+      ["🖤 大人っぽい", "adult"],
+      ["✨ 透明感", "clear"],
+      ["🤎 ナチュラル", "natural"],
+      ["🔥 盛れ感重視", "glam"]
+    ]
+  },
+
+  {
+    id: "concern",
+    title: "一番気になるところは？",
+    note: "",
+    options: [
+      ["👀 目を大きく見せたい", "eyes"],
+      ["✨ 小顔に見せたい", "smallFace"],
+      ["🤎 エラを自然に整えたい", "jaw"],
+      ["👃 鼻をすっきり見せたい", "nose"],
+      ["🌸 垢抜けたい", "refresh"],
+      ["💗 自分に似合う色を知りたい", "color"]
+    ]
+  }
+
+];
+
+let currentQuestion = 0;
+let answers = {};
+let selectedValue = null;
+
+
+function startDiagnosis() {
+
+  document.getElementById("startScreen")
+    .classList.add("hidden");
+
+  document.getElementById("quizScreen")
+    .classList.remove("hidden");
+
+  currentQuestion = 0;
+  answers = {};
+
+  showQuestion();
+
+}
+
+
+function showQuestion() {
+
+  const q = questions[currentQuestion];
+
+  selectedValue = answers[q.id] || null;
+
+  document.getElementById("questionTitle").textContent = q.title;
+
+  document.getElementById("questionNote").textContent = q.note;
+
+  document.getElementById("stepText").textContent =
+    `STEP ${currentQuestion + 1} / ${questions.length}`;
+
+  const percent =
+    Math.round(
+      ((currentQuestion) / questions.length) * 100
+    );
+
+  document.getElementById("progressPercent").textContent =
+    `${percent}%`;
+
+  document.getElementById("progressBar").style.width =
+    `${percent}%`;
+
+  const options =
+    document.getElementById("options");
+
+  options.innerHTML = "";
+
+  if (q.visual) {
+
+    options.className = "visual-options";
+
+  } else {
+
+    options.className = "options";
+
+  }
+
+  q.options.forEach(option => {
+
+    const button = document.createElement("button");
+
+    button.type = "button";
+
+    button.className =
+      q.visual
+      ? "visual-option"
+      : "option";
+
+    if (option[1] === selectedValue) {
+      button.classList.add("selected");
+    }
+
+    if (q.visual) {
+
+      button.innerHTML = `
+        <div class="face-icon">◯</div>
+        <div class="visual-label">${option[0]}</div>
+      `;
+
+    } else {
+
+      button.innerHTML = `
+        <span class="option-title">${option[0]}</span>
+      `;
+
+    }
+
+    button.onclick = () => {
+
+      selectedValue = option[1];
+
+      document
+        .querySelectorAll(".option, .visual-option")
+        .forEach(el => el.classList.remove("selected"));
+
+      button.classList.add("selected");
+
+      document.getElementById("nextButton")
+        .disabled = false;
+
+    };
+
+    options.appendChild(button);
+
+  });
+
+  document.getElementById("nextButton")
+    .textContent =
+      currentQuestion === questions.length - 1
+      ? "診断結果を見る ✨"
+      : "次へ →";
+
+}
+
+
+function nextQuestion() {
+
+  if (!selectedValue) return;
+
+  const q = questions[currentQuestion];
+
+  answers[q.id] = selectedValue;
+
+  if (currentQuestion < questions.length - 1) {
+
+    currentQuestion++;
+
+    showQuestion();
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  } else {
+
+    showResult();
+
+  }
+
+}
+
+
+function showResult() {
+
+  document.getElementById("quizScreen")
+    .classList.add("hidden");
+
+  document.getElementById("resultScreen")
+    .classList.remove("hidden");
+
+  let style = "ナチュラル透明感メイク";
+
+  if (answers.mood === "korean") {
+    style = "韓国っぽ透明感メイク";
+  }
+
+  if (answers.mood === "cute") {
+    style = "ふんわり愛されメイク";
+  }
+
+  if (answers.mood === "adult") {
+    style = "大人っぽ洗練メイク";
+  }
+
+  if (answers.mood === "glam") {
+    style = "盛れ感アップメイク";
+  }
+
+  if (answers.mood === "natural") {
+    style = "ナチュラル垢抜けメイク";
+  }
+
+  document.getElementById("resultTitle")
+    .textContent = style;
+
+
+  let colorText =
+    "肌なじみの良いカラーから試してみるのがおすすめ♡";
+
+  if (answers.color === "spring") {
+    colorText =
+      "コーラル・ピーチ・明るめベージュなど、明るくあたたかみのあるカラーがおすすめ。";
+  }
+
+  if (answers.color === "summer") {
+    colorText =
+      "ローズ・青みピンク・モーヴなど、涼しげで柔らかなカラーがおすすめ。";
+  }
+
+  if (answers.color === "autumn") {
+    colorText =
+      "テラコッタ・ブラウン・オレンジ・カーキなど、深みのあるカラーがおすすめ。";
+  }
+
+  if (answers.color === "winter") {
+    colorText =
+      "ローズ・ワイン・青みピンク・深めのレッドなど、コントラストのあるカラーがおすすめ。";
+  }
+
+  if (answers.color === "unknown") {
+    colorText =
+      "まずはピンク・ベージュ・コーラルなど、普段使いやすい色から比較してみるのがおすすめ♡";
+  }
+
+  document.getElementById("colorResult")
+    .textContent = colorText;
+
+
+  let eyeText =
+    "目元は自分の目の形を活かして、濃くしすぎないのがポイント。";
+
+  if (answers.eyeType === "single") {
+    eyeText =
+      "一重なら、アイシャドウを広げすぎず、目を開けたときにも見える位置を意識。目尻側にポイントを置くのもおすすめ。";
+  }
+
+  if (answers.eyeType === "hooded") {
+    eyeText =
+      "奥二重なら、締め色を広げすぎず、目尻側にポイントを置くと目元がすっきりまとまりやすいよ♡";
+  }
+
+  if (answers.eyeType === "double") {
+    eyeText =
+      "二重なら、二重幅を埋めすぎないように淡いカラーから重ねると、抜け感のある目元に。";
+  }
+
+  if (answers.eyeShape === "down") {
+    eyeText +=
+      " たれ目を活かすなら、目尻側を柔らかく下向きに仕上げると優しい印象に。";
+  }
+
+  if (answers.eyeShape === "up") {
+    eyeText +=
+      " つり目を活かすなら、目尻側を横方向に伸ばしてすっきり仕上げるのがおすすめ。";
+  }
+
+  document.getElementById("eyeResult")
+    .textContent = eyeText;
+
+
+  let faceText =
+    "フェイスラインは一部分だけを強調せず、薄く自然に整えるのがポイント。";
+
+  if (answers.face === "roundFace") {
+    faceText =
+      "丸顔なら、フェイスラインに薄くシェーディングを入れ、チークはやや高めにするとすっきり見えやすいよ♡";
+  }
+
+  if (answers.face === "longFace") {
+    faceText =
+      "面長なら、縦方向を強調しすぎないように、チークを横長に入れたり、額と顎先を自然に調整するのがおすすめ。";
+  }
+
+  if (answers.face === "square") {
+    faceText =
+      "ベース型・エラが気になる場合は、エラだけを濃く囲まず、フェイスラインに薄くシェーディングを入れると自然。";
+  }
+
+  if (answers.face === "heart") {
+    faceText =
+      "逆三角なら、頬の高い位置に柔らかくチークを入れて、顔全体のバランスを整えるのがおすすめ。";
+  }
+
+  document.getElementById("faceResult")
+    .textContent = faceText;
+
+
+  let makeupText =
+    "自分の特徴を隠しすぎず、得意な部分を活かすメイクを意識してみて♡";
+
+  if (answers.concern === "jaw") {
+    makeupText =
+      "エラが気になるなら、エラ部分を濃く囲むのではなく、耳の前からフェイスラインに沿って薄くシェーディング。境目をしっかりぼかすのがポイント。";
+  }
+
+  if (answers.concern === "eyes") {
+    makeupText =
+      "目を大きく見せたいなら、アイシャドウを広げすぎるより、目のキワ・目尻・まつ毛の存在感を意識すると自然に盛りやすいよ♡";
+  }
+
+  if (answers.concern === "nose") {
+    makeupText =
+      "鼻をすっきり見せたいなら、眉頭の下〜鼻の付け根にごく薄く影を入れて、鼻筋中央には少量のハイライトを。濃くしすぎないのがコツ。";
+  }
+
+  if (answers.concern === "smallFace") {
+    makeupText =
+      "小顔っぽく見せたいなら、フェイスラインに薄く影を入れつつ、チーク・ハイライトを顔の中心寄りに配置してメリハリを作るのがおすすめ。";
+  }
+
+  if (answers.concern === "refresh") {
+    makeupText =
+      "垢抜けたいなら、ベースを厚くするより、眉・チーク・リップの色味を揃えるだけでも全体の統一感が出やすいよ♡";
+  }
+
+  document.getElementById("makeupResult")
+    .textContent = makeupText;
+
+
+  let shoppingText =
+    "あなたの診断結果に合わせて、SELQIANがおすすめアイテムを選べるようにしていくよ♡";
+
+  if (
+    answers.budget === "low" &&
+    (answers.age === "age1" ||
+     answers.age === "age2" ||
+     answers.age === "age3" ||
+     answers.age === "age4")
+  ) {
+    shoppingText =
+      "20代向けのプチプラ・韓国コスメを中心に選ぶのがおすすめ♡";
+  }
+
+  if (
+    answers.budget === "midlow" &&
+    (answers.age === "age2" ||
+     answers.age === "age3" ||
+     answers.age === "age4")
+  ) {
+    shoppingText =
+      "韓国コスメ＋人気プチプラを中心に、少しだけ価格帯を広げて探すのがおすすめ。";
+  }
+
+  if (answers.budget === "high") {
+    shoppingText =
+      "価格だけで決めず、カラー・仕上がり・使いやすさを重視して選ぶのがおすすめ。";
+  }
+
+  document.getElementById("shoppingResult")
+    .textContent = shoppingText;
+
+
+  const tags = document.getElementById("resultTags");
+
+  tags.innerHTML = "";
+
+  const tagValues = [
+    answers.color !== "unknown" ? answers.color : "カラー診断参考",
+    answers.budget,
+    answers.mood,
+    answers.face
+  ];
+
+  tagValues.forEach(tag => {
+
+    if (!tag) return;
+
+    const div = document.createElement("span");
+
+    div.className = "tag";
+
+    div.textContent = tag;
+
+    tags.appendChild(div);
+
+  });
+
+}
+
+
+function restartDiagnosis() {
+
+  document.getElementById("resultScreen")
+    .classList.add("hidden");
+
+  document.getElementById("startScreen")
+    .classList.remove("hidden");
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+}
+
+</script>
+
+</body>
+</html>
