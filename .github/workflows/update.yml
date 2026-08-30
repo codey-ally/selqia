@@ -31,13 +31,14 @@ jobs:
           import time
           from html import escape
 
-              categories = {
-           "韓国 美容液": "biyoueki.html",
-           "韓国 フェイスパック": "pack.html",
-           "韓国コスメ": "cosme.html",
-           "韓国 美容家電": "beauty-device.html",
-           "韓国 ヘアケア": "haircare.html"
-             }
+　　　　　　　　categories = {
+   　　　　　　　　 "美容液": "biyoueki.html",
+    　　　　　　　　"フェイスパック": "pack.html",
+   　　　　　　　　 "コスメ": "cosme.html",
+   　　　　　　　　 "美容家電": "beauty-device.html",
+   　　　　　　　　 "ヘアケア": "haircare.html"
+　　　　　　　　　}
+
 
 
           all_items = []
