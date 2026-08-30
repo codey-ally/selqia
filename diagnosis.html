@@ -997,17 +997,93 @@ if (answers.concern === "lips") {
     let products = data.items || [];
 
     // 予算に合わせて商品を絞る
-    if (answers.budget === "low") {
-      products = products.filter(p => Number(p.itemPrice) <= 2000);
+    let products = data.items || [];
+
+    // 年代・予算・雰囲気に合わせて商品を選ぶ
+    const age = answers.age;
+    const budget = answers.budget;
+    const mood = answers.mood;
+
+    // 予算
+    if (budget === "low") {
+      products = products.filter(p =>
+        Number(p.itemPrice || 0) <= 2000
+      );
     }
 
-    if (answers.budget === "mid") {
-      products = products.filter(p => Number(p.itemPrice) <= 5000);
+    if (budget === "midlow") {
+      products = products.filter(p =>
+        Number(p.itemPrice || 0) <= 3500
+      );
     }
 
-    if (answers.budget === "high") {
-      products = products.filter(p => Number(p.itemPrice) >= 2000);
+    if (budget === "mid") {
+      products = products.filter(p =>
+        Number(p.itemPrice || 0) <= 8000
+      );
     }
+
+    if (budget === "high") {
+      products = products.filter(p =>
+        Number(p.itemPrice || 0) >= 2000
+      );
+    }
+
+    // 20代は韓国コスメ・プチプラを優先
+    if (
+      ["age1", "age2", "age3", "age4"].includes(age)
+    ) {
+      const youngProducts = products.filter(p => {
+
+        const name = (p.itemName || "").toLowerCase();
+
+        return (
+          name.includes("韓国") ||
+          name.includes("キャンメイク") ||
+          name.includes("セザンヌ") ||
+          name.includes("rom&nd") ||
+          name.includes("ロムアンド") ||
+          name.includes("dasique") ||
+          name.includes("デイジーク") ||
+          name.includes("peripera") ||
+          name.includes("hince") ||
+          name.includes("clio")
+        );
+
+      });
+
+      if (youngProducts.length >= 3) {
+        products = youngProducts;
+      }
+    }
+
+    // なりたい雰囲気を優先
+    if (mood === "korean") {
+
+      const koreanProducts = products.filter(p => {
+
+        const name = (p.itemName || "").toLowerCase();
+
+        return (
+          name.includes("韓国") ||
+          name.includes("rom&nd") ||
+          name.includes("ロムアンド") ||
+          name.includes("dasique") ||
+          name.includes("デイジーク") ||
+          name.includes("peripera") ||
+          name.includes("hince") ||
+          name.includes("clio")
+        );
+
+      });
+
+      if (koreanProducts.length >= 3) {
+        products = koreanProducts;
+      }
+    }
+
+    // 最大6商品
+    products = products.slice(0, 6);
 
     // 商品が少ない場合は全商品から表示
     if (products.length < 3) {
