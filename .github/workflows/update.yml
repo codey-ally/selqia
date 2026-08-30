@@ -43,7 +43,18 @@ jobs:
 
           all_items = []
 
-          for keyword, filename in categories.items():
+        all_items = []
+
+search_keywords = {
+    "美容液": ["韓国美容液", "韓国 スキンケア", "韓国 エイジングケア"],
+    "フェイスパック": ["韓国 フェイスパック", "韓国 パック", "韓国 シートマスク"],
+    "コスメ": ["韓国コスメ", "韓国 リップ", "韓国 アイシャドウ", "韓国 チーク", "韓国 ファンデーション"],
+    "美容家電": ["韓国 美顔器", "韓国 美容家電"],
+    "ヘアケア": ["韓国 ヘアケア", "韓国 シャンプー", "韓国 ヘアパック"]
+}
+
+for category, filename in categories.items():
+    for keyword in search_keywords[category]:
 
               params = {
                   "applicationId": os.environ["RAKUTEN_APP_ID"],
