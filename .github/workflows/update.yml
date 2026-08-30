@@ -49,10 +49,8 @@ jobs:
               "ヘアケア": ["韓国 ヘアケア", "韓国 シャンプー", "韓国 ヘアパック"]
           }
 
-          for category, filename in categories.items():
+                for category, filename in categories.items():
               for keyword in search_keywords[category]:
-for category, filename in categories.items():
-    for keyword in search_keywords[category]:
 
               params = {
                   "applicationId": os.environ["RAKUTEN_APP_ID"],
@@ -87,7 +85,7 @@ for category, filename in categories.items():
 
                   for item in data.get("Items", []):
                       product = item.get("Item", {})
-                      product["_category"] = keyword
+                      product["_category"] = category
                       products.append(product)
                       all_items.append(product)
 
