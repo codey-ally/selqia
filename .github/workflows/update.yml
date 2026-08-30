@@ -78,25 +78,27 @@ jobs:
                   )
 
                   try:
-                  with urllib.request.urlopen(request, timeout=30) as response:
-                      data = json.load(response)
+                      with urllib.request.urlopen(request, timeout=30) as response:
+                          data = json.load(response)
 
-                  products = []
+                      products = []
 
-                  for item in data.get("Items", []):
-                      product = item.get("Item", {})
-                      product["_category"] = category
-                      products.append(product)
-                      all_items.append(product)
+                      for item in data.get("Items", []):
+                          product = item.get("Item", {})
+                          product["_category"] = category
+                          products.append(product)
+                          all_items.append(product)
 
-                  print(keyword, ":", len(products))
+                      print(keyword, ":", len(products))
 
-              except urllib.error.HTTPError as e:
-                  print(keyword, "ERROR:", e.code)
-                  print(e.read().decode("utf-8", errors="replace"))
-                  continue
+                  except urllib.error.HTTPError as e:
+                      print(keyword, "ERROR:", e.code)
+                      print(e.read().decode("utf-8", errors="replace"))
+                      continue
 
-              time.sleep(1)
+                  time.sleep(1)
+
+            
 
           result = {
               "updatedAt": time.strftime("%Y-%m-%d %H:%M:%S"),
